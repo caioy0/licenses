@@ -5,6 +5,7 @@ dist-ssr/
 .vite/
 .env*
 *.local
+.wrangler
 
 # macOS
 .DS_Store
