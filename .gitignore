@@ -1,0 +1,27 @@
+# Vite & Node
+node_modules/
+dist/
+dist-ssr/
+.vite/
+.env*
+*.local
+
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+
+# IDEs (VS Code / JetBrains)
+.vscode/
+.idea/
