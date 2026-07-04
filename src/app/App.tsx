@@ -988,6 +988,10 @@ export default function App() {
               </button>
             ))}
           </div>
+            <button className=" text-gray-600 hover:text-foreground transition-colors"
+            onClick={() => window.open('https://github.com/caioy0/licenses', '_blank', 'noreferrer')}>
+              Github
+            </button>
           <p className="text-xs text-muted-foreground">{t.footerDisclaimer}</p>
         </div>
       </footer>
