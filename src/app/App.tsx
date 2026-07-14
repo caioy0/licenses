@@ -8,7 +8,7 @@ import {
 
 type Lang = "pt" | "en";
 
-const SECTION_IDS = ["intro", "licenses", "consequences", "templates", "howto", "faq", "references"];
+const SECTION_IDS = ["intro", "world", "licenses", "consequences", "templates", "howto", "faq", "references"];
 
 function useScrollSpy(ids: string[]) {
   const [active, setActive] = useState(ids[0]);
@@ -106,17 +106,16 @@ function PopBar({ d, inView }: { d: { name: string; pct: number; color: string }
     requestAnimationFrame(tick);
   }, [inView, d.pct]);
   return (
-    <div className="flex items-center gap-4 group">
+    <div className="flex items-center gap-3 group">
       <div className="w-24 flex-shrink-0 text-right">
         <span className="text-[13px] font-bold text-neutral-800 group-hover:text-black transition-colors">{d.name}</span>
       </div>
       <div className="flex-1 h-8 bg-black/[0.04] rounded-xl overflow-hidden">
-        <div className="h-full rounded-xl flex items-center justify-end pr-3 transition-none"
-          style={{ width: `${width}%`, background: d.color }}>
-          {width > 15 && <span className="text-[11px] font-black text-white drop-shadow">{count}%</span>}
-        </div>
+        <div className="h-full rounded-xl transition-none" style={{ width: `${width}%`, background: d.color }} />
       </div>
-      {width <= 15 && <span className="text-[11px] font-bold w-8 flex-shrink-0" style={{ color: d.color }}>{count}%</span>}
+      <div className="w-10 flex-shrink-0 text-left">
+        <span className="text-[11px] font-black" style={{ color: d.color }}>{count}%</span>
+      </div>
     </div>
   );
 }
@@ -527,7 +526,7 @@ const POPULARITY_DATA = [
 /* ─── UI strings ─── */
 const UI = {
   pt: {
-    nav: ["Intro", "Licenças", "Consequências", "Templates", "Como usar", "FAQ", "Referências"],
+    nav: ["Intro", "No mundo", "Licenças", "Consequências", "Templates", "Como usar", "FAQ", "Referências"],
     heroEyebrow: "Para quem nunca viu",
     heroTitle: "O que é uma\nlicença de software?",
     heroSub: "Uma regra que diz o que as pessoas podem fazer com o seu código.",
@@ -616,7 +615,7 @@ const UI = {
     footerGithub: "Ver no GitHub",
   },
   en: {
-    nav: ["Intro", "Licenses", "Consequences", "Templates", "How to use", "FAQ", "References"],
+    nav: ["Intro", "In the wild", "Licenses", "Consequences", "Templates", "How to use", "FAQ", "References"],
     heroEyebrow: "For those who've never seen one",
     heroTitle: "What is a\nsoftware license?",
     heroSub: "A rule that tells people what they can do with your code.",
@@ -764,6 +763,83 @@ interface GHLicense { key: string; name: string; spdx_id: string; }
 interface GHLicenseDetail extends GHLicense { body: string; }
 
 
+/* ─── "In the wild" section data ─── */
+const WORLD_TILES = [
+  { name: "Linux Kernel", emoji: "🐧", license: "GPL v2", color: "#f97316", desc_pt: "Roda em 96% dos servidores do mundo", desc_en: "Powers 96% of the world's servers", url: "https://github.com/torvalds/linux" },
+  { name: "Android", emoji: "🤖", license: "Apache 2.0", color: "#3b82f6", desc_pt: "2,5 bilhões de dispositivos ativos", desc_en: "2.5 billion active devices", url: "https://github.com/aosp-mirror/platform_frameworks_base" },
+  { name: "React", emoji: "⚛️", license: "MIT", color: "#22c55e", desc_pt: "UI de Meta, Airbnb e Netflix", desc_en: "UI powering Meta, Airbnb, Netflix", url: "https://github.com/facebook/react" },
+  { name: "VS Code", emoji: "💻", license: "MIT", color: "#22c55e", desc_pt: "Editor nº 1 — 73% dos devs", desc_en: "Editor #1 — used by 73% of devs", url: "https://github.com/microsoft/vscode" },
+  { name: "TensorFlow", emoji: "🧠", license: "Apache 2.0", color: "#3b82f6", desc_pt: "Fundação de IA moderna do Google", desc_en: "Google's modern AI foundation", url: "https://github.com/tensorflow/tensorflow" },
+  { name: "WordPress", emoji: "📝", license: "GPL v2", color: "#f97316", desc_pt: "43% de todos os sites do mundo", desc_en: "43% of all websites worldwide", url: "https://github.com/WordPress/WordPress" },
+  { name: "Node.js", emoji: "🟩", license: "MIT", color: "#22c55e", desc_pt: "Runtime JS — Netflix, LinkedIn, PayPal", desc_en: "JS runtime — Netflix, LinkedIn, PayPal", url: "https://github.com/nodejs/node" },
+  { name: "Kubernetes", emoji: "☸️", license: "Apache 2.0", color: "#3b82f6", desc_pt: "Containers — Google, AWS, Azure", desc_en: "Containers — Google, AWS, Azure", url: "https://github.com/kubernetes/kubernetes" },
+];
+
+const WORLD_STATS = [
+  { stat: "44.7%", color: "#22c55e", bg: "bg-emerald-50", border: "border-emerald-100", label_pt: "dos repositórios GitHub usam MIT", label_en: "of GitHub repos use MIT" },
+  { stat: "75%", color: "#3b82f6", bg: "bg-blue-50", border: "border-blue-100", label_pt: "do código aberto usa só 3 licenças", label_en: "of open-source uses just 3 licenses" },
+  { stat: "100%", color: "#f97316", bg: "bg-orange-50", border: "border-orange-100", label_pt: "das Fortune 500 auditam licenças antes de adotar código", label_en: "of Fortune 500 audit licenses before adopting code" },
+];
+
+function WorldSection({ lang }: { lang: Lang }) {
+  return (
+    <section id="world" className="py-28 px-5 bg-[#f9f9f9]">
+      <div className="max-w-5xl mx-auto">
+        <FadeIn className="text-center mb-14">
+          <span className="inline-block text-xs font-bold tracking-widest uppercase text-emerald-600 mb-4 px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">
+            {lang === "pt" ? "Você já usou hoje" : "You've already used it today"}
+          </span>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
+            {lang === "pt" ? "Licenças estão em todo lugar" : "Licenses are everywhere"}
+          </h2>
+          <p className="text-neutral-500 font-medium max-w-xl mx-auto">
+            {lang === "pt"
+              ? "Todo npm install, todo clone, todo app que você usa rodou código com licença."
+              : "Every npm install, every clone, every app you use ran code with a license."}
+          </p>
+        </FadeIn>
+
+        <FadeIn className="mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {WORLD_TILES.map((t) => (
+              <a key={t.name} href={t.url} target="_blank" rel="noopener noreferrer"
+                className="bg-white rounded-2xl border border-black/[0.07] p-4 hover:shadow-md hover:border-black/20 hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
+                <div className="flex items-start justify-between mb-3">
+                  <span className="text-2xl">{t.emoji}</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border flex-shrink-0"
+                    style={{ color: t.color, borderColor: t.color + "40", background: t.color + "18" }}>
+                    {t.license}
+                  </span>
+                </div>
+                <div className="font-black text-[15px] tracking-tight mb-1 text-black">{t.name}</div>
+                <div className="text-[11px] text-neutral-400 leading-relaxed flex-1">
+                  {lang === "pt" ? t.desc_pt : t.desc_en}
+                </div>
+                <div className="mt-3 flex items-center gap-1 text-[10px] font-semibold text-neutral-300">
+                  <Github className="w-3 h-3" /> GitHub ↗
+                </div>
+              </a>
+            ))}
+          </div>
+        </FadeIn>
+
+        <FadeIn>
+          <div className="grid md:grid-cols-3 gap-3">
+            {WORLD_STATS.map((s) => (
+              <div key={s.stat} className={`${s.bg} rounded-2xl border ${s.border} p-6 text-center`}>
+                <div className="text-4xl font-black tracking-tight mb-2" style={{ color: s.color }}>{s.stat}</div>
+                <div className="text-sm font-semibold text-neutral-600 leading-snug">
+                  {lang === "pt" ? s.label_pt : s.label_en}
+                </div>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
 /* ═══════════════════ MAIN ═══════════════════ */
 export default function App() {
   const [lang, setLang] = useState<Lang>("pt");
@@ -900,11 +976,10 @@ export default function App() {
                     <div className="text-neutral-500 text-xs mt-0.5">{c.sub}</div>
                   </div>
                   <Expand open={isOpen}>
-                    <div className="px-4 pb-4 flex flex-col gap-2.5" onClick={(e) => e.stopPropagation()}>
+                    <div className="px-4 pb-4 flex flex-col gap-2" onClick={(e) => e.stopPropagation()}>
                       <div className="h-px bg-white/10" />
-                      <p className="text-[12px] text-neutral-300 leading-relaxed text-left">{c.detail}</p>
                       {c.points.map((pt) => (
-                        <div key={pt} className="flex items-start gap-2 text-[11px] text-neutral-400 text-left">
+                        <div key={pt} className="flex items-start gap-2 text-[11px] text-neutral-300 text-left font-medium">
                           <Check className="w-3 h-3 text-emerald-400 flex-shrink-0 mt-0.5" /><span>{pt}</span>
                         </div>
                       ))}
@@ -949,11 +1024,10 @@ export default function App() {
                       <p className="text-neutral-600 text-[14px] leading-relaxed">{p.a}</p>
                     </div>
                     <Expand open={isOpen}>
-                      <div className="px-7 pb-7 flex flex-col gap-4" onClick={(e) => e.stopPropagation()}>
+                      <div className="px-7 pb-7 flex flex-col gap-3" onClick={(e) => e.stopPropagation()}>
                         <div className="h-px bg-black/10" />
-                        <p className="text-[14px] text-neutral-700 leading-relaxed">{p.extra}</p>
                         {p.points.map((pt) => (
-                          <div key={pt} className="flex items-center gap-2.5 text-sm font-medium">
+                          <div key={pt} className="flex items-center gap-2.5 text-sm font-semibold">
                             <Check className="w-4 h-4 text-black flex-shrink-0" /><span>{pt}</span>
                           </div>
                         ))}
@@ -965,29 +1039,19 @@ export default function App() {
             })}
           </div>
           <div className="grid md:grid-cols-3 gap-4 mb-4">
-            {ui.reasons.map((r, i) => {
-              const isOpen = openReasons.has(r.id);
-              return (
-                <FadeIn key={r.id} delay={i * 0.1}>
-                  <div className={`rounded-3xl border-2 cursor-pointer transition-all duration-300 overflow-hidden ${isOpen ? "border-black bg-black text-white shadow-xl" : "border-black/[0.07] bg-[#f9f9f9] hover:border-black/20 hover:shadow-sm"}`}
-                    onClick={() => setOpenReasons((prev) => toggleSet(prev, r.id))}>
-                    <div className="p-6 flex gap-4 items-start">
-                      <span className="text-2xl flex-shrink-0 mt-0.5">{r.icon}</span>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between gap-2 mb-1">
-                          <h4 className={`font-bold text-[15px] ${isOpen ? "text-white" : "text-black"}`}>{r.title}</h4>
-                          <ToggleIcon open={isOpen} light={isOpen} />
-                        </div>
-                        <p className={`text-sm leading-relaxed ${isOpen ? "text-neutral-400" : "text-neutral-500"}`}>{r.desc}</p>
-                      </div>
-                    </div>
-                    <Expand open={isOpen}>
-                      <p className="px-6 pb-6 text-[13px] text-neutral-300 leading-relaxed border-t border-white/10 pt-4">{r.extra}</p>
-                    </Expand>
+            {ui.reasons.map((r, i) => (
+              <FadeIn key={r.id} delay={i * 0.1}>
+                <div className="rounded-3xl border border-black/[0.07] bg-[#f9f9f9] p-6 flex gap-4 items-center h-full">
+                  <div className="w-11 h-11 rounded-2xl bg-black flex items-center justify-center flex-shrink-0">
+                    <span className="text-xl">{r.icon}</span>
                   </div>
-                </FadeIn>
-              );
-            })}
+                  <div>
+                    <h4 className="font-bold text-[15px] text-black mb-0.5">{r.title}</h4>
+                    <p className="text-[13px] text-neutral-500 leading-relaxed">{r.desc}</p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
           </div>
           <FadeIn>
             <div className="rounded-3xl bg-black text-white p-8">
@@ -1007,12 +1071,11 @@ export default function App() {
                         <div className="text-neutral-500 text-xs mt-0.5">{w.sub}</div>
                       </div>
                       <Expand open={isOpen}>
-                        <div className="px-4 pb-4 flex flex-col gap-2" onClick={(e) => e.stopPropagation()}>
-                          <div className="h-px bg-white/10" />
-                          <p className="text-[12px] text-neutral-300 leading-relaxed">{w.detail}</p>
-                          <div className="flex items-start gap-1.5 mt-0.5">
-                            <span className="text-amber-400 text-[10px] mt-0.5">💡</span>
-                            <p className="text-[11px] text-neutral-500 leading-relaxed">{w.tip}</p>
+                        <div className="px-4 pb-4" onClick={(e) => e.stopPropagation()}>
+                          <div className="h-px bg-white/10 mb-3" />
+                          <div className="flex items-start gap-1.5">
+                            <span className="text-amber-400 text-[11px] mt-0.5">💡</span>
+                            <p className="text-[12px] text-neutral-300 leading-relaxed font-medium">{w.tip}</p>
                           </div>
                         </div>
                       </Expand>
@@ -1024,6 +1087,9 @@ export default function App() {
           </FadeIn>
         </div>
       </section>
+
+      {/* ── IN THE WILD ── */}
+      <WorldSection lang={lang} />
 
       {/* ── LICENSES — single big card ── */}
       <section id="licenses" className="py-28 px-5 bg-[#f9f9f9]">
@@ -1220,6 +1286,16 @@ export default function App() {
             <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-3 text-white">{ui.consTitle}</h2>
             <p className="text-neutral-500 font-medium">{ui.consSub}</p>
           </FadeIn>
+          <FadeIn className="mb-8">
+            <div className="rounded-2xl bg-white/[0.04] border border-white/[0.08] px-6 py-4">
+              <p className="text-[14px] text-neutral-400 leading-relaxed text-center">
+                {lang === "pt"
+                  ? "Ignorar licenças tem custo real. Veja o que aconteceu com empresas que não levaram a sério."
+                  : "Ignoring licenses has a real cost. See what happened to companies that didn't take it seriously."}
+              </p>
+            </div>
+          </FadeIn>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
             {consequences.map((c, i) => {
               const isOpen = openCons.has(c.id);
